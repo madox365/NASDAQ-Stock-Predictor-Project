@@ -1,0 +1,130 @@
+data:
+  raw_path: "data/raw/stocks"
+  processed_path: "data/processed"
+  
+  # FILTRAR SOLO RANGO MEDIO (crítico para mejorar)
+  start_date: "2018-01-01"        # Últimos 7 años (suficiente)
+  min_years_coverage: 5            # Relajar a 5 años
+  
+  train_end: "2022-12-31"         
+  val_end: "2023-12-31"           
+  
+  require_full_coverage: true
+  
+  # CLAVE: Solo tickers de $100-500 (rango controlado)
+  selected_tickers:
+  # Tech - Semiconductores & Chips ($150–$500)
+  - "NVDA"    # ~$320 (ajustado por splits, boom AI)
+  - "AVGO"    # ~$420 (crecimiento sostenido)
+  - "KLAC"    # ~$380 (split 2024, promedio histórico OK)
+  - "LRCX"    # ~$460 (split 2024, promedio en rango)
+  - "AMAT"    # ~$180
+  - "TXN"     # ~$170
+  - "QCOM"    # ~$150
+  - "ADI"     # ~$200
+  - "NXPI"    # ~$220
+  - "MPWR"    # ~$450
+  - "MCHP"    # ~$85  # Borderline, pero sube a ~$100 en 2025
+  - "AMD"
+  - "SBUX"
+  # Tech - Software & Cloud ($120–$450)
+  - "MSFT"    # ~$300
+  - "ADBE"    # ~$380
+  - "INTU"    # ~$480
+  - "PANW"    # ~$300
+  - "CRWD"    # ~$260
+  - "ZS"      # ~$200
+  - "DDOG"    # ~$130
+  - "MDB"     # ~$350
+  - "WDAY"    # ~$250
+  - "TEAM"    # ~$200
+
+  # Tech - Consumer & Platforms ($140–$450)
+  - "AAPL"    # ~$180
+  - "GOOGL"   # ~$140
+  - "AMZN"    # ~$160
+  - "META"    # ~$380
+  - "NFLX"    # ~$440
+  - "TSLA"    # ~$220
+  - "ROKU"    # ~$110 (recuperación 2024–2025)
+  - "DOCU"    # ~$110 (crecimiento post-pandemia)
+
+  # Healthcare & Biotech ($150–$500)
+  - "ISRG"    # ~$400
+  - "VRTX"    # ~$420
+  - "REGN"    # ~$480
+  - "IDXX"    # ~$480
+  - "DXCM"    # ~$130
+  - "ALGN"    # ~$280
+  - "BMRN"    # ~$100  # BioMarin, sube en 2025
+
+  # Industrial & Services ($150–$500)
+  - "LIN"     # ~$420
+  - "CTAS"    # ~$200
+  - "ODFL"    # ~$380
+  - "POOL"    # ~$400
+  - "ROP"     # ~$480
+  - "VRSK"    # ~$280
+
+  # Consumer Discretionary ($150–$400)
+  - "LULU"    # ~$350
+  - "TSCO"    # ~$240
+  - "ULTA"    # ~$400
+  - "EXPE"    # ~$140
+  - "HON"
+  - "PEP"
+
+features:
+  lookback_window: 30              # Aumentar a 30 (más contexto)
+  prediction_horizon: 1            
+  
+  technical_indicators:
+    - "SMA_20"
+    - "SMA_50"                     # Agregar SMA_50
+    - "EMA_12"                     # Agregar EMA
+    - "RSI_14"
+    - "MACD"
+
+models:
+  lstm:
+    units: [128, 64]               # Volver a red más grande
+    dropout: 0.2
+    learning_rate: 0.001
+    batch_size: 64                 # Aumentar batch
+    epochs: 30                     # Más epochs
+    
+  gru:
+    units: [128, 64]               # Volver a red más grande
+    dropout: 0.2
+    learning_rate: 0.001
+    batch_size: 64
+    epochs: 30
+  
+  tcn:
+    filters: 64
+    kernel_size: 3
+    dilations: [1, 2, 4, 8]
+    dropout: 0.2
+    learning_rate: 0.001
+    batch_size: 32
+    epochs: 50
+  
+  # TFT - Transformer (nuevo, experimental)
+  tft:
+    hidden_size: 64             # Dimensión del transformer
+    num_attention_heads: 4      # Heads de atención (debe dividir hidden_size)
+    dropout: 0.1                # Dropout más bajo para transformers
+    learning_rate: 0.0005       # LR más bajo para estabilidad
+    batch_size: 32              # Igual que TCN (funciona bien)
+    epochs: 30                  # Menos épocas (converge rápido)
+
+training:
+  early_stopping_patience: 10
+  reduce_lr_patience: 5
+  random_seed: 42
+
+paths:
+  results: "results"
+  models: "results/models"
+  plots: "results/plots"
+  tables: "results/tables"
