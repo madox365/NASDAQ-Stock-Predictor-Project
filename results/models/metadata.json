@@ -1,0 +1,150 @@
+{
+  "feature_cols": [
+    "Open",
+    "High",
+    "Low",
+    "Close",
+    "SMA_20",
+    "SMA_50",
+    "EMA_12",
+    "RSI_14",
+    "MACD",
+    "MACD_signal"
+  ],
+  "input_shape": [
+    30,
+    10
+  ],
+  "train_samples": 310378,
+  "val_samples": 8550,
+  "test_samples": 17600,
+  "config": {
+    "data": {
+      "raw_path": "data/raw/stocks",
+      "processed_path": "data/processed",
+      "start_date": "2018-01-01",
+      "min_years_coverage": 5,
+      "train_end": "2022-12-31",
+      "val_end": "2023-12-31",
+      "require_full_coverage": true,
+      "selected_tickers": [
+        "NVDA",
+        "AVGO",
+        "KLAC",
+        "LRCX",
+        "AMAT",
+        "TXN",
+        "QCOM",
+        "ADI",
+        "NXPI",
+        "MPWR",
+        "MCHP",
+        "AMD",
+        "SBUX",
+        "MSFT",
+        "ADBE",
+        "INTU",
+        "PANW",
+        "CRWD",
+        "ZS",
+        "DDOG",
+        "MDB",
+        "WDAY",
+        "TEAM",
+        "AAPL",
+        "GOOGL",
+        "AMZN",
+        "META",
+        "NFLX",
+        "TSLA",
+        "ROKU",
+        "DOCU",
+        "ISRG",
+        "VRTX",
+        "REGN",
+        "IDXX",
+        "DXCM",
+        "ALGN",
+        "BMRN",
+        "LIN",
+        "CTAS",
+        "ODFL",
+        "POOL",
+        "ROP",
+        "VRSK",
+        "LULU",
+        "TSCO",
+        "ULTA",
+        "EXPE",
+        "HON",
+        "PEP"
+      ]
+    },
+    "features": {
+      "lookback_window": 30,
+      "prediction_horizon": 1,
+      "technical_indicators": [
+        "SMA_20",
+        "SMA_50",
+        "EMA_12",
+        "RSI_14",
+        "MACD"
+      ]
+    },
+    "models": {
+      "lstm": {
+        "units": [
+          128,
+          64
+        ],
+        "dropout": 0.2,
+        "learning_rate": 0.001,
+        "batch_size": 64,
+        "epochs": 30
+      },
+      "gru": {
+        "units": [
+          128,
+          64
+        ],
+        "dropout": 0.2,
+        "learning_rate": 0.001,
+        "batch_size": 64,
+        "epochs": 30
+      },
+      "tcn": {
+        "filters": 64,
+        "kernel_size": 3,
+        "dilations": [
+          1,
+          2,
+          4,
+          8
+        ],
+        "dropout": 0.2,
+        "learning_rate": 0.001,
+        "batch_size": 32,
+        "epochs": 50
+      },
+      "tft": {
+        "hidden_size": 64,
+        "num_attention_heads": 4,
+        "dropout": 0.1,
+        "learning_rate": 0.0005,
+        "batch_size": 32,
+        "epochs": 30
+      }
+    },
+    "training": {
+      "early_stopping_patience": 10,
+      "reduce_lr_patience": 5,
+      "random_seed": 42
+    },
+    "paths": {
+      "results": "results",
+      "models": "results/models",
+      "plots": "results/plots",
+      "tables": "results/tables"
+    }
+  }
+}
