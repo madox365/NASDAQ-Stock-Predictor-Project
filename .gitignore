@@ -20,8 +20,8 @@ venv.bak/
 *.pth
 *.pt
 *.weights
+*.txt
 
-data/
 *.csv
 
 siborrar.py
